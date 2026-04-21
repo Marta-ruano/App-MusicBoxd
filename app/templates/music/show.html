@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/music.css">
+{% endblock %}
+
+{% block h1 %}Detalle de música{% endblock %}
+{% block p %}Información de una canción o álbum{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/music/">Volver</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <section class="panel">
+
+            <div class="detail-layout">
+
+                <div class="detail-cover">
+                    {% if m.imagen %}
+                        {% if m.imagen.startswith('/public/') %}
+                            <img src="{{ m.imagen }}" alt="portada">
+                        {% else %}
+                            <img src="/download/{{ m.imagen }}" alt="portada">
+                        {% endif %}
+                    {% elif m.portada %}
+                        <img src="{{ m.portada }}" alt="portada">
+                    {% else %}
+                        <div class="detail-cover-empty">Sin imagen</div>
+                    {% endif %}
+                </div>
+
+                <div class="detail-info">
+                    <h2 class="detail-title">{{ m.nombre }}</h2>
+
+                    <div class="table-wrap detail-table">
+                        <table class="music-table">
+                            <tbody>
+                                <tr><th>Tipo</th><td>{{ m.tipo }}</td></tr>
+                                <tr><th>Artista</th><td>{{ m.artista }}</td></tr>
+                                <tr><th>Género</th><td>{{ m.genero }}</td></tr>
+                                <tr><th>Álbum</th><td>{{ m.album }}</td></tr>
+                                <tr><th>Canciones</th><td>{{ m.num_canciones }}</td></tr>
+                                <tr><th>Duración</th><td>{{ m.duracion }}</td></tr>
+                                <tr><th>Año</th><td>{{ m.año }}</td></tr>
+                                {% if m.url %}
+                                <tr>
+                                    <th>Url</th>
+                                    <td>
+                                        <a class="detail-link" href="{{ m.url }}" target="_blank" rel="noopener">
+                                            Abrir en Spotify
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-actions">
+                        <a class="btn btn-primary" href="/music/{{ m.id }}/edit">Editar</a>
+
+                        <form class="inline-form" action="/music/{{ m.id }}" method="post"
+                              onsubmit="return confirm('¿Seguro que quieres borrar esta música?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger" type="submit">Borrar</button>
+                        </form>
+
+                        <a class="btn btn-secondary" href="/music/">Volver a la lista</a>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</main>
+{% endblock %}

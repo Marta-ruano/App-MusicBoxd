@@ -1,0 +1,78 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/reviews.css">
+{% endblock %}
+
+{% block h1 %}Explora reseñas{% endblock %}
+{% block p %}Todas las reseñas de música{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/reviews/new">+ Añadir reseña</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+
+        <section class="reviews-hero">
+            <div>
+                <h2>Explora reseñas</h2>
+                <p class="lead">Explora las opiniones de la comunidad</p>
+            </div>
+        </section>
+
+        <div class="reviews-grid">
+            {% for r in reviews %}
+                {% set m = r.music %}
+                <article class="review-card">
+
+                    <div class="review-stars">
+                        {{ "★" * (r.valoracion or 0) }}{{ "☆" * (5 - (r.valoracion or 0)) }}
+                    </div>
+
+                    {% if m %}
+                        <h3>{{ m.nombre }}</h3>
+                        <div class="review-meta">{{ m.artista }} · {{ r.fecha }}</div>
+                    {% else %}
+                        <h3>Música eliminada</h3>
+                        <div class="review-meta">{{ r.fecha }}</div>
+                    {% endif %}
+
+                    <p>{{ r.texto }}</p>
+
+                    <div class="row-actions" style="margin-top: 14px; display:flex; gap:10px; align-items:center;">
+                        <a class="btn btn-row" href="/reviews/{{ r.id }}/edit">Editar</a>
+
+                        <form action="/reviews/{{ r.id }}" method="post"
+                              onsubmit="return confirm('¿Seguro que quieres borrar esta reseña?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger" type="submit">Borrar</button>
+                        </form>
+
+                        {% if m and m.url %}
+                            <a href="{{ m.url }}" target="_blank" rel="noopener"
+                               class="spotify-link" style="margin-left:auto;">
+                                <img src="/public/img/spotify.png" class="spotify-icon" alt="Spotify">
+                            </a>
+                        {% endif %}
+                    </div>
+
+                </article>
+            {% endfor %}
+
+            {% if reviews|length == 0 %}
+            <div class="panel empty-state">
+                <h3>No hay reseñas todavía</h3>
+                <p class="muted">Sé el primero en valorar música y compartir tu opinión</p>
+
+                <a class="btn btn-primary" href="/reviews/new">Escribir reseña</a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/home.css">
+{% endblock %}
+
+{% block h1 %}MusicBoxd{% endblock %}
+{% block p %}Inicia sesión para acceder a tu música{% endblock %}
+
+{% block btn %}{% endblock %}
+
+{% block content %}
+<main>
+  <div class="container">
+
+    <section class="section">
+      <div class="hero-square">
+        <div class="hero-square-inner">
+          <h2>Iniciar sesión</h2>
+          <p>Accede con tu email y contraseña</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <form action="/auth/login" method="post">
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" name="password" required>
+        </div>
+
+        <button class="btn btn-primary" type="submit">Iniciar</button>
+      </form>
+
+      <p class="auth-link">
+        ¿No tienes cuenta? 
+        <a href="/auth/register" class="auth-action">Regístrate</a>
+      </p>
+    </section>
+
+  </div>
+</main>
+{% endblock %}

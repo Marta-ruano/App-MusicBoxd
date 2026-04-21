@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/music.css">
+{% endblock %}
+
+{% block h1 %}Añadir usuario{% endblock %}
+{% block p %}Crea un usuario nuevo{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/users/">Ver usuarios</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <section class="section">
+            <div class="section-head">
+                <h2>Nuevo usuario</h2>
+                <div class="rule"></div>
+            </div>
+
+            <form action="/users/" method="post">
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input id="username" name="username" type="text" required>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" required>
+                </div>
+
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" required>
+                </div>
+
+                <div class="filters-actions">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a class="btn btn-secondary" href="/users/">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+{% endblock %}

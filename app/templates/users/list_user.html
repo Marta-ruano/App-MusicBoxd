@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/users.css">
+{% endblock %}
+
+{% block h1 %}Explora Usuarios{% endblock %}
+{% block p %}Explora usuarios y encuentra a tus amigos{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/users/new">+ Añadir usuario</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <section class="section">
+            <div class="section-head">
+                <h2>Lista de usuarios</h2>
+                <div class="rule"></div>
+                <p class="lead">Aquí puedes ver todos los usuarios registrados</p>
+            </div>
+
+            <div class="users-grid">
+                {% for user in users %}
+                <div class="user-card">
+
+                    <div class="user-photo">
+                        <img src="/public/img/user.png" alt="foto usuario">
+                    </div>
+
+                    <div class="user-info">
+                        <div class="user-username">{{ user.username }}</div>
+                        <div class="user-email">{{ user.email }}</div>
+                    </div>
+
+                    <div class="user-actions">
+                        <a class="btn btn-row" href="/users/{{ user.id }}">Ver</a>
+                        <a class="btn btn-row" href="/users/{{ user.id }}/edit">Editar</a>
+
+                        <form action="/users/{{ user.id }}" method="post"
+                              onsubmit="return confirm('¿Seguro que quieres borrar este usuario?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger" type="submit">Borrar</button>
+                        </form>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+        </section>
+    </div>
+</main>
+{% endblock %}

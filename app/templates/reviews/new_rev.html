@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block h1 %}Escribe reseñas{% endblock %}
+{% block p %}Valora música y deja tu opinión personal{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/reviews/">Ver reseñas</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="bg-rosa">
+    <div class="container">
+        <section class="panel">
+            <h2>Nueva reseña</h2>
+
+            <form action="/reviews/" method="post">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="music_id">Música</label>
+                        <select id="music_id" name="music_id" required>
+                            <option value="" disabled selected>Selecciona…</option>
+                            {% for m in music %}
+                                <option value="{{ m.id }}">{{ m.nombre }} · {{ m.artista }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="fecha">Fecha</label>
+                        <input id="fecha" name="fecha" type="date" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="valoracion">Valoración</label>
+                        <select id="valoracion" name="valoracion" required>
+                            <option value="" disabled selected>Selecciona…</option>
+                            <option value="★☆☆☆☆">★☆☆☆☆</option>
+                            <option value="★★☆☆☆">★★☆☆☆</option>
+                            <option value="★★★☆☆">★★★☆☆</option>
+                            <option value="★★★★☆">★★★★☆</option>
+                            <option value="★★★★★">★★★★★</option>
+                        </select>
+                    </div>
+                </div>
+                    
+                <div class="field">
+                    <label for="texto">Tu reseña</label>
+                    <textarea id="texto" name="texto" placeholder="Escribe aquí tu opinión…" required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a class="btn" href="/reviews/">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+{% endblock %}

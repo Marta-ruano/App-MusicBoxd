@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/music.css">
+{% endblock %}
+
+{% block h1 %}Añade música{% endblock %}
+{% block p %}Crea un álbum o canción y añádelo a tu lista{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/music/">Ver música</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="bg-rosa">
+    <div class="container">
+        <section class="panel">
+            <h2>Nueva música</h2>
+            
+            <form action="/music/" method="post" enctype="multipart/form-data">
+
+                <div class="field">
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="" disabled selected>Selecciona…</option>
+                        {% for t in tipo %}
+                            <option value="{{ t }}">{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" name="nombre" type="text" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="artista">Artista</label>
+                        <input id="artista" name="artista" type="text" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="genero">Género</label>
+                        <input id="genero" name="genero" type="text" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="duracion">Duración</label>
+                        <input id="duracion" name="duracion" type="text" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="año">Año</label>
+                        <input id="año" name="año" type="number" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="url">URL Spotify</label>
+                        <input id="url" name="url" type="url" placeholder="https://..." required>
+                    </div>
+
+                    <div class="field">
+                        <label>Imagen</label>
+
+                        <label for="file" class="custom-file-btn">
+                            Seleccionar imagen
+                        </label>
+
+                        <input type="file"
+                            id="file"
+                            name="imagen"
+                            accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+                            hidden>
+
+                        <div class="preview-container">
+                            <img id="preview" class="preview-img" style="display:none;">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-sections">
+                    <div class="form-section hidden" id="section-cancion">
+                        <div class="section-title">Campos de Canción</div>
+                        <div class="field">
+                            <label for="album">Álbum</label>
+                            <input id="album" name="album" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-section hidden" id="section-album">
+                        <div class="section-title">Campos de Álbum</div>
+                        <div class="field">
+                            <label for="numCanciones">Número de canciones</label>
+                            <input id="numCanciones" name="numCanciones" type="number" min="1">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" type="submit">Guardar</button>
+                    <a class="btn" href="/music/">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+
+{% block extra_js %}
+<script src="/public/javascripts/music_new.js"></script>
+{% endblock %}
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/music.css">
+{% endblock %}
+
+{% block h1 %}Detalle de usuario{% endblock %}
+{% block p %}Información del usuario{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/users/">Volver</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+
+        <section class="panel">
+            <div class="detail-layout">
+
+                <div class="detail-cover">
+                    <img src="/public/img/user.png" alt="foto usuario">
+                </div>
+
+                <div class="detail-info">
+                    <h2 class="detail-title">{{ user.username }}</h2>
+
+                    <div class="table-wrap detail-table">
+                        <table class="music-table">
+                            <tbody>
+                                <tr><th>ID</th><td>{{ user.id }}</td></tr>
+                                <tr><th>Username</th><td>{{ user.username }}</td></tr>
+                                <tr><th>Email</th><td>{{ user.email }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="display:flex; gap:12px; align-items:center; margin-top:22px;">
+                        <a class="btn btn-primary" href="/users/{{ user.id }}/edit">Editar</a>
+
+                        <form action="/users/{{ user.id }}" method="post"
+                              onsubmit="return confirm('¿Seguro que quieres borrar este usuario?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-danger" type="submit">Borrar</button>
+                        </form>
+
+                        <a class="btn btn-secondary" href="/users/">Volver</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</main>
+{% endblock %}

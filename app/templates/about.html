@@ -1,0 +1,122 @@
+{% extends 'layout.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/home.css">
+{% endblock %}
+
+{% block h1 %}MusicBoxd{% endblock %}
+{% block p %}Todo sobre nosotros{% endblock %}
+
+{% block content %}
+
+{% block btn %}{% endblock %}
+
+<main >
+    <div class="container">
+        <section class="about-hero">
+            <div class="about-hero-inner">
+                <div >
+                    <h2 class="about-title">
+                        En MusicBoxd cada canción es una historia
+                    </h2>
+
+                    <p class="about-lead">
+                        La música guarda emociones, recuerdos y momentos, y en 
+                        MusicBoxd compartes lo que cada canción significa para ti
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">+1M</div>
+                    <div class="stat-text">usuarios activos</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-number">250K</div>
+                    <div class="stat-text">reseñas publicadas</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-number">50K</div>
+                    <div class="stat-text">canciones guardadas</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-text">de satisfacción</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="how-table-section how-amarillo">
+                <h3 class="section-title-centered">¿Cómo funciona?</h3>
+
+                <div class="how-table">
+                    <div class="how-row">
+                        <div class="how-number">01</div>
+                        <div class="how-text">
+                            Guarda canciones y álbumes en tu biblioteca personal
+                        </div>
+                    </div>
+
+                    <div class="how-row">
+                        <div class="how-number">02</div>
+                        <div class="how-text">
+                            Puntúa y escribe reseñas sobre lo que escuchas
+                        </div>
+                    </div>
+
+                    <div class="how-row">
+                        <div class="how-number">03</div>
+                        <div class="how-text">
+                            Descubre nuevas recomendaciones y tendencias musicales
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="about-spotify-row">
+            <div>
+                <h3 class="about-section-title">Escucha con Spotify</h3>
+                <p class="about-lead" style="margin: 0;">
+                Escucha directamente las canciones que descubres y guarda tu música favorita.
+                </p>
+            </div>
+
+            <a href="https://open.spotify.com/" target="_blank" rel="noopener">
+                <img class="about-spotify-logo" src="/public/img/spotify.png" alt="Spotify">
+            </a>
+        </section>
+
+        <div class="rule" style="margin-top: 24px;"></div>
+
+        <section class="panel">
+            <h3 class="top-artists-title">TOP ARTISTAS</h3>
+
+            <div class="how-cards">
+                <article class="how-card">
+                    <img src="/public/img/taylor.jpg" alt="Taylor Swift">
+                    <div class="how-reveal">Taylor Swift</div>
+                </article>
+
+                <article class="how-card">
+                    <img src="/public/img/badbunny.jpg" alt="Bad Bunny">
+                    <div class="how-reveal">Bad bunny</div>
+                </article>
+
+                <article class="how-card">
+                    <img src="/public/img/weeknd.jpg" alt="The Weeknd">
+                    <div class="how-reveal">The Weeknd</div>
+                </article>
+            </div>
+        </section>
+    </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/music.css">
+{% endblock %}
+
+{% block h1 %}Editar música{% endblock %}
+{% block p %}Modifica la información{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/music/{{ m.id }}">Volver</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <section class="section">
+            <div class="section-head">
+                <h2>Editar música</h2>
+                <div class="rule"></div>
+            </div>
+
+            <form action="/music/{{ m.id }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT">
+
+                <div class="field">
+                    <label>Portada</label>
+
+                    <div class="preview-container">
+                        {% if m.imagen %}
+                            {% if m.imagen.startswith('/public/') %}
+                                <img id="preview" class="preview-img" src="{{ m.imagen }}" alt="imagen">
+                            {% else %}
+                                <img id="preview" class="preview-img" src="/download/{{ m.imagen }}" alt="imagen">
+                            {% endif %}
+                        {% else %}
+                            <img id="preview" class="preview-img" src="/public/img/user.png" alt="imagen">
+                        {% endif %}
+                    </div>
+
+                    <label for="file" class="custom-file-btn" style="margin-top:12px;">
+                        Seleccionar imagen
+                    </label>
+
+                    <input
+                        type="file"
+                        id="file"
+                        name="imagen"
+                        accept=".png,.jpg,.jpeg,image/png,image/jpeg"
+                        hidden
+                    >
+
+                    <small class="muted">Si subes una nueva, se reemplaza la anterior.</small>
+                </div>
+
+                <div class="field">
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo" name="tipo" required>
+                        <option value="Canción" {% if m.tipo == "Canción" %}selected{% endif %}>Canción</option>
+                        <option value="Álbum" {% if m.tipo == "Álbum" %}selected{% endif %}>Álbum</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="nombre">Nombre</label>
+                    <input id="nombre" type="text" name="nombre" value="{{ m.nombre }}" required>
+                </div>
+
+                <div class="field">
+                    <label for="artista">Artista</label>
+                    <input id="artista" type="text" name="artista" value="{{ m.artista }}" required>
+                </div>
+
+                <div class="field">
+                    <label for="genero">Género</label>
+                    <input id="genero" type="text" name="genero" value="{{ m.genero }}">
+                </div>
+
+                <div class="field">
+                    <label for="album">Álbum</label>
+                    <input id="album" type="text" name="album" value="{{ m.album or '' }}">
+                </div>
+
+                <div class="field">
+                    <label for="numCanciones">Número de canciones</label>
+                    <input id="numCanciones" type="number" name="numCanciones" min="1" value="{{ m.num_canciones or '' }}">
+                </div>
+
+                <div class="field">
+                    <label for="duracion">Duración</label>
+                    <input id="duracion" type="text" name="duracion" value="{{ m.duracion }}" required>
+                </div>
+
+                <div class="field">
+                    <label for="año">Año</label>
+                    <input id="año" type="number" name="año" value="{{ m.año }}" required>
+                </div>
+
+                <div class="field">
+                    <label for="url">Spotify URL</label>
+                    <input id="url" type="url" name="url" value="{{ m.url }}" placeholder="https://..." required>
+                </div>
+
+                <div class="filters-actions">
+                    <button class="btn btn-primary" type="submit">Guardar cambios</button>
+                    <a class="btn btn-secondary" href="/music/{{ m.id }}">Cancelar</a>
+                </div>
+
+            </form>
+        </section>
+    </div>
+</main>
+
+{% block extra_js %}
+<script src="/public/javascripts/music_edit.js"></script>
+{% endblock %}
+
+{% endblock %}

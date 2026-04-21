@@ -1,0 +1,467 @@
+openapi: 3.0.3
+info:
+  title: MusicBoxd API
+  description: API RESTful para gestionar música en MusicBoxd
+  version: 1.0.0
+
+servers:
+  - url: http://127.0.0.1:5000/api/v1
+    description: Servidor local de desarrollo
+
+tags:
+  - name: Music
+    description: Operaciones sobre el recurso música
+
+paths:
+  /music/:
+    get:
+      tags:
+        - Music
+      summary: Obtener toda la música
+      description: Devuelve la lista completa de recursos musicales almacenados.
+      responses:
+        '200':
+          description: Lista de música obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Music'
+              examples:
+                listaMusica:
+                  summary: Ejemplo de lista de música
+                  value:
+                    - id: 1
+                      tipo: "Canción"
+                      nombre: "No me quiero casar"
+                      artista: "Bad Bunny"
+                      genero: "Trap latino"
+                      album: "Nadie sabe lo que va a pasar mañana"
+                      numCanciones: null
+                      duracion: "3:45"
+                      año: 2023
+                      url: "https://open.spotify.com/intl-es/track/39L3LdlHS3gqB62HPWaJRg"
+                      imagen: "/public/img/casar.jpg"
+                      user_id: 1
+                    - id: 2
+                      tipo: "Álbum"
+                      nombre: "LUX"
+                      artista: "Rosalía"
+                      genero: "Pop"
+                      album: null
+                      numCanciones: 15
+                      duracion: "49:35"
+                      año: 2025
+                      url: "https://open.spotify.com/intl-es/album/3SUEJULSGgBDG1j4GQhfYY"
+                      imagen: "/public/img/lux.jpg"
+                      user_id: 2
+
+    post:
+      tags:
+        - Music
+      summary: Crear un recurso musical
+      description: Crea una nueva canción o álbum validando el JSON recibido con Pydantic.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMusic'
+            examples:
+              nuevaCancion:
+                summary: Crear una canción
+                value:
+                  tipo: "Canción"
+                  nombre: "Prueba API"
+                  artista: "Marta"
+                  genero: "Pop"
+                  album: "Single"
+                  numCanciones: null
+                  duracion: "03:15"
+                  año: 2026
+                  url: "https://example.com"
+                  imagen: "/public/img/prueba.jpg"
+                  user_id: 1
+      responses:
+        '201':
+          description: Recurso creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Music'
+        '400':
+          description: Error de validación o JSON incorrecto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /music/{music_id}:
+    get:
+      tags:
+        - Music
+      summary: Obtener música por ID
+      description: >
+        Devuelve una música concreta y la enriquece con información externa:
+        datos del usuario asociado y otras canciones del mismo artista obtenidas
+        desde una API pública con caché.
+      parameters:
+        - name: music_id
+          in: path
+          required: true
+          description: ID del recurso musical
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Música encontrada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MusicDetail'
+              examples:
+                detalleMusica:
+                  summary: Ejemplo de detalle enriquecido
+                  value:
+                    id: 1
+                    tipo: "Canción"
+                    nombre: "No me quiero casar"
+                    artista: "Bad Bunny"
+                    genero: "Trap latino"
+                    album: "Nadie sabe lo que va a pasar mañana"
+                    numCanciones: null
+                    duracion: "3:45"
+                    año: 2023
+                    url: "https://open.spotify.com/intl-es/track/39L3LdlHS3gqB62HPWaJRg"
+                    imagen: "/public/img/casar.jpg"
+                    user_id: 1
+                    user:
+                      id: "1"
+                      username: "nico"
+                      email: "nico@gmail.com"
+                      role: "user"
+                    otras_canciones:
+                      - title: "Tití Me Preguntó"
+                        artist: "Bad Bunny"
+                        album: "Un Verano Sin Ti"
+                        release_date: "2022-05-06T07:00:00Z"
+                        preview_url: "https://audio-ssl.itunes.apple.com/example.m4a"
+                        cover: "https://is1-ssl.mzstatic.com/image/thumb/example.jpg/100x100bb.jpg"
+                      - title: "Moscow Mule"
+                        artist: "Bad Bunny"
+                        album: "Un Verano Sin Ti"
+                        release_date: "2022-05-06T07:00:00Z"
+                        preview_url: "https://audio-ssl.itunes.apple.com/example2.m4a"
+                        cover: "https://is1-ssl.mzstatic.com/image/thumb/example2.jpg/100x100bb.jpg"
+        '404':
+          description: Música no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags:
+        - Music
+      summary: Actualizar música
+      description: Modifica parcialmente o totalmente una música existente.
+      parameters:
+        - name: music_id
+          in: path
+          required: true
+          description: ID del recurso musical
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditMusic'
+            examples:
+              editarAlbum:
+                summary: Editar un álbum
+                value:
+                  tipo: "Álbum"
+                  nombre: "LUX"
+                  artista: "Rosalía"
+                  genero: "Pop"
+                  album: null
+                  numCanciones: 15
+                  duracion: "49:35"
+                  año: 2025
+                  url: "https://open.spotify.com/intl-es/album/3SUEJULSGgBDG1j4GQhfYY"
+                  imagen: "/public/img/lux.jpg"
+      responses:
+        '200':
+          description: Música actualizada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Music'
+        '400':
+          description: Error de validación o datos incorrectos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Música no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - Music
+      summary: Eliminar música
+      description: Borra una música por su ID.
+      parameters:
+        - name: music_id
+          in: path
+          required: true
+          description: ID del recurso musical
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Música eliminada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Music 1 deleted"
+        '404':
+          description: Música no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    Music:
+      type: object
+      required:
+        - id
+        - tipo
+        - nombre
+        - artista
+        - genero
+        - duracion
+        - año
+        - user_id
+      properties:
+        id:
+          type: integer
+          example: 1
+        tipo:
+          type: string
+          example: "Canción"
+        nombre:
+          type: string
+          example: "No me quiero casar"
+        artista:
+          type: string
+          example: "Bad Bunny"
+        genero:
+          type: string
+          example: "Trap latino"
+        album:
+          type: string
+          nullable: true
+          example: "Nadie sabe lo que va a pasar mañana"
+        numCanciones:
+          type: integer
+          nullable: true
+          example: null
+        duracion:
+          type: string
+          example: "3:45"
+        año:
+          type: integer
+          example: 2023
+        url:
+          type: string
+          nullable: true
+          example: "https://open.spotify.com/intl-es/track/39L3LdlHS3gqB62HPWaJRg"
+        imagen:
+          type: string
+          nullable: true
+          example: "/public/img/casar.jpg"
+        user_id:
+          oneOf:
+            - type: integer
+            - type: string
+          example: 1
+
+    NewMusic:
+      type: object
+      required:
+        - tipo
+        - nombre
+        - artista
+        - genero
+        - duracion
+        - año
+        - user_id
+      properties:
+        tipo:
+          type: string
+          example: "Canción"
+        nombre:
+          type: string
+          example: "Prueba API"
+        artista:
+          type: string
+          example: "Marta"
+        genero:
+          type: string
+          example: "Pop"
+        album:
+          type: string
+          nullable: true
+          example: "Single"
+        numCanciones:
+          type: integer
+          nullable: true
+          example: null
+        duracion:
+          type: string
+          example: "03:15"
+        año:
+          type: integer
+          example: 2026
+        url:
+          type: string
+          nullable: true
+          example: "https://example.com"
+        imagen:
+          type: string
+          nullable: true
+          example: "/public/img/prueba.jpg"
+        user_id:
+          oneOf:
+            - type: integer
+            - type: string
+          example: 1
+
+    EditMusic:
+      type: object
+      properties:
+        tipo:
+          type: string
+          example: "Álbum"
+        nombre:
+          type: string
+          example: "LUX"
+        artista:
+          type: string
+          example: "Rosalía"
+        genero:
+          type: string
+          example: "Pop"
+        album:
+          type: string
+          nullable: true
+          example: null
+        numCanciones:
+          type: integer
+          nullable: true
+          example: 15
+        duracion:
+          type: string
+          example: "49:35"
+        año:
+          type: integer
+          example: 2025
+        url:
+          type: string
+          nullable: true
+          example: "https://open.spotify.com/intl-es/album/3SUEJULSGgBDG1j4GQhfYY"
+        imagen:
+          type: string
+          nullable: true
+          example: "/public/img/lux.jpg"
+
+    User:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: string
+          example: "1"
+        username:
+          type: string
+          example: "nico"
+        email:
+          type: string
+          format: email
+          example: "nico@gmail.com"
+        role:
+          type: string
+          example: "user"
+
+    ExternalSong:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+          example: "Tití Me Preguntó"
+        artist:
+          type: string
+          nullable: true
+          example: "Bad Bunny"
+        album:
+          type: string
+          nullable: true
+          example: "Un Verano Sin Ti"
+        release_date:
+          type: string
+          nullable: true
+          example: "2022-05-06T07:00:00Z"
+        preview_url:
+          type: string
+          nullable: true
+          example: "https://audio-ssl.itunes.apple.com/example.m4a"
+        cover:
+          type: string
+          nullable: true
+          example: "https://is1-ssl.mzstatic.com/image/thumb/example.jpg/100x100bb.jpg"
+
+    MusicDetail:
+      allOf:
+        - $ref: '#/components/schemas/Music'
+        - type: object
+          properties:
+            user:
+              $ref: '#/components/schemas/User'
+            otras_canciones:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExternalSong'
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Validation error"
+        details:
+          nullable: true
+          description: Información adicional del error

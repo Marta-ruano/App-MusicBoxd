@@ -1,0 +1,157 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/music.css">
+{% endblock %}
+
+{% block h1 %}Explora música{% endblock %}
+{% block p %}Explora canciones y álbumes{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/music/new">+ Añadir música</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <section class="section">
+            <div class="section-head">
+                <h2>Explorar música</h2>
+                <div class="rule"></div>
+                <p class="lead">Aquí podrás ver todas las canciones y álbumes.</p>
+            </div>
+
+            <form class="filters-row" method="get" action="/music/">
+
+                <div class="field">
+                    <label>Buscar</label>
+                    <input name="q"
+                           placeholder="nombre o artista"
+                           value="{{ request.args.get('q','') }}">
+                </div>
+
+                <div class="field">
+                    <label>Tipo</label>
+                    <select name="tipo">
+                        <option value="">Todos</option>
+                        <option value="Canción"
+                            {% if request.args.get("tipo") == "Canción" %}selected{% endif %}>
+                            Canción
+                        </option>
+                        <option value="Álbum"
+                            {% if request.args.get("tipo") == "Álbum" %}selected{% endif %}>
+                            Álbum
+                        </option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Género</label>
+                    <select name="genero">
+                        <option value="">Todos</option>
+                        {% for g in generos %}
+                            <option value="{{ g }}"
+                                {% if request.args.get("genero") == g %}selected{% endif %}>
+                                {{ g }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filters-actions">
+                    <button class="btn btn-primary">Filtrar</button>
+                    <a class="btn btn-secondary" href="/music/">Limpiar</a>
+                </div>
+
+            </form>
+
+            <div class="table-wrap">
+                <table class="music-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Portada</th>
+                            <th>Nombre</th>
+                            <th>Artista</th>
+                            <th>Género</th>
+                            <th>Álbum</th>
+                            <th>Canciones</th>
+                            <th>Duración</th>
+                            <th>Año</th>
+                            <th>Favorita</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for m in music %}
+                            <tr>
+                                <td>
+                                    <span class="tag type-tag tipo">{{ m.tipo }}</span>
+                                </td>
+                                
+                                <td class="maincell">
+                                    <div class="name-cell">
+                                        {% if m.imagen %}
+                                            {% if m.imagen.startswith('/public/') %}
+                                                <img src="{{ m.imagen }}" alt="thumbnail" class="mini-cover">
+                                            {% else %}
+                                                <img src="{{ url_for('assets', filename='thumbnails/' ~ m.imagen) }}" alt="thumbnail" class="mini-cover">
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="mini-cover">—</div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+
+                                <td class="maincell">
+                                    <a class="title" href="/music/{{ m.id }}">{{ m.nombre }}</a>
+                                </td>
+
+                                <td>{{ m.artista }}</td>
+                                <td>
+                                    <span class="tag type-tag genero">{{ m.genero }}</span>
+                                </td>
+                                <td class="muted">{{ m.album }}</td>
+                                <td class="muted">{{ m.num_canciones }}</td>
+                                <td class="num">{{ m.duracion }}</td>
+                                <td class="num">{{ m.año }}</td>
+
+                                <td class="fav-cell">
+                                    <img
+                                        class="fav-star"
+                                        src="/public/img/star_grey.png"
+                                        data-key="music-{{ m.id }}"
+                                        data-fav="false"
+                                        alt="favorito"
+                                    >
+                                </td>
+
+                                <td class="row-actions">
+                                    <a class="btn btn-row" href="/music/{{ m.id }}">Ver</a>
+                                    <a class="btn btn-row" href="/music/{{ m.id }}/edit">Editar</a>
+                                    
+                                    <form action="/music/{{ m.id }}" method="post"
+                                        onsubmit="return confirm('¿Seguro que quieres borrar esta musica?');">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button class="btn btn-danger" type="submit">Borrar</button>
+                                    </form>
+                                    
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+
+{% block extra_js %}
+<script src="/public/javascripts/music_list.js"></script>
+{% endblock %}
+
+{% endblock %}

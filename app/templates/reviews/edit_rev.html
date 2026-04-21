@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block h1 %}Editar reseña{% endblock %}
+{% block p %}Modifica tu reseña{% endblock %}
+
+{% block btn %}
+<div class="right">
+    <a class="btn btn-secondary" href="/reviews/">Volver</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<main class="bg-rosa">
+    <div class="container">
+        <section class="panel">
+            <h2>Editar reseña</h2>
+
+            <form action="/reviews/{{ r.id }}" method="post">
+                <input type="hidden" name="_method" value="PUT">
+
+                <div class="field">
+                    <label for="music_id">Música</label>
+                    <select id="music_id" name="music_id" required>
+                        {% for m in music %}
+                            <option value="{{ m.id }}" {% if m.id == r.music_id %}selected{% endif %}>
+                                {{ m.nombre }} — {{ m.artista }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="fecha">Fecha</label>
+                        <input id="fecha" type="date" name="fecha" value="{{ r.fecha }}" required>
+                    </div>
+
+                    <div class="field">
+                        <label for="valoracion">Valoración</label>
+                        <select id="valoracion" name="valoracion" required>
+                            {% set opts = ["★☆☆☆☆","★★☆☆☆","★★★☆☆","★★★★☆","★★★★★"] %}
+                            {% for v in opts %}
+                                <option value="{{ v }}" {% if v == r.valoracion %}selected{% endif %}>{{ v }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="field" style="grid-column: 1 / -1;">
+                    <label for="texto">Reseña</label>
+                    <textarea id="texto" name="texto" rows="5" required>{{ r.texto }}</textarea>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-primary" type="submit">Guardar cambios</button>
+                    <a class="btn btn-secondary" href="/reviews/">Cancelar</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</main>
+{% block extra_js %}
+<script src="/public/javascripts/review_edit.js"></script>
+{% endblock %}
+{% endblock %}

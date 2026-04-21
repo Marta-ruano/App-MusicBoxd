@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="/public/stylesheets/home.css">
+{% endblock %}
+
+{% block h1 %}MusicBoxd{% endblock %}
+{% block p %}Reseña y valora música{% endblock %}
+
+{% block btn %}{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+
+        <section class="section">
+            <div class="hero-square">
+                <div class="hero-square-inner">
+                    <h2>Reseña y valora música</h2>
+                    <p>Mantén tu historial musical y descubre el de tus amigos</p>
+
+                    <div class="actions">
+                        <a class="btn btn-primary" href="/music/">Explorar</a>
+                        <a class="btn btn-primary" href="/music/new">Añadir</a>
+                        <a class="btn btn-primary"
+                           href="https://open.spotify.com/playlist/37i9dQZEVXbMDoHDwVN2tF"
+                           target="_blank" rel="noopener">
+                            Top global
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel panel-songs">
+            <h2>Canciones destacadas</h2>
+
+            <div class="populares-grid">
+                {% for m in canciones[:3] %}
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            {% if m.imagen %}
+                                {% if m.imagen.startswith('/public/') %}
+                                    <img src="{{ m.imagen }}" alt="Portada">
+                                {% else %}
+                                    <img src="{{ url_for('download', filename=m.imagen) }}" alt="Portada">
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="flip-back">
+                            <div>
+                                <div class="back-title">{{ m.nombre }}</div>
+                                <div class="meta"><strong>Artista:</strong> {{ m.artista }}</div>
+                                <div class="meta"><strong>Álbum:</strong> {{ m.album }}</div>
+                                <div class="meta"><strong>Género:</strong> {{ m.genero }}</div>
+                                <div class="meta"><strong>Duración:</strong> {{ m.duracion }}</div>
+                                <div class="meta"><strong>Año:</strong> {{ m.año }}</div>
+                            </div>
+
+                            <div class="rating">
+                                {% if m.url %}
+                                    <a href="{{ m.url }}" target="_blank" rel="noopener" class="spotify-badge">
+                                        <img src="/public/img/spotify.png" alt="Spotify">
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="panel panel-albums">
+            <h2>Álbumes destacados</h2>
+
+            <div class="populares-grid">
+                {% for m in albums[:3] %}
+                <div class="flip-card">
+                    <div class="flip-inner">
+                        <div class="flip-front">
+                            {% if m.imagen %}
+                                {% if m.imagen.startswith('/public/') %}
+                                    <img src="{{ m.imagen }}" alt="Portada">
+                                {% else %}
+                                    <img src="{{ url_for('download', filename=m.imagen) }}" alt="Portada">
+                                {% endif %}
+                            {% endif %}
+                        </div>
+
+                        <div class="flip-back">
+                            <div>
+                                <div class="back-title">{{ m.nombre }}</div>
+                                <div class="meta"><strong>Artista:</strong> {{ m.artista }}</div>
+                                <div class="meta"><strong>Género:</strong> {{ m.genero }}</div>
+                                <div class="meta"><strong>Duración:</strong> {{ m.duracion }}</div>
+                                <div class="meta"><strong>Canciones:</strong> {{ m.num_canciones }}</div>
+                                <div class="meta"><strong>Año:</strong> {{ m.año }}</div>
+                            </div>
+
+                            <div class="rating">
+                                {% if m.url %}
+                                    <a href="{{ m.url }}" target="_blank" rel="noopener" class="spotify-badge">
+                                        <img src="/public/img/spotify.png" alt="Spotify">
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+    </div>
+</main>
+{% endblock %}
