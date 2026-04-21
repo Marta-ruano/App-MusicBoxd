@@ -7,3 +7,5 @@ __pycache__/
 instance/
 .vscode/
 .idea/
+*.log
+.DS_Store
