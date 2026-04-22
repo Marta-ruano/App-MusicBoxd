@@ -1,9 +1,9 @@
-MusicBoxd
+# MusicBoxd
 
 A simple Flask RESTful API that allows users to store, organize and review music (albums and songs)  
 Each user sign up or login, and they have access to their own music 
 
-Commands to run the project
+## Commands to run the project
 
 Clone or download the repository: git clone https://github.com/your-username/App-MusicBoxd.git 
 
