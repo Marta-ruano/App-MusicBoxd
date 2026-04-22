@@ -46,7 +46,7 @@ werkzeug_logger.setLevel(logging.INFO)
 
 app.wsgi_app = MethodOverrideMiddleware(app.wsgi_app)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://root:2011@localhost/MusicBoxd"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+mysqlconnector://root:secretkey@localhost/MusicBoxd"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db.init_app(app)
